@@ -1,0 +1,359 @@
+[
+  {
+    "chunk": 1,
+    "start_index": 1,
+    "end_index": 34,
+    "song_count": 34,
+    "songs_with_genre": 33,
+    "songs_without_genre": 1,
+    "genre_distribution": {
+      "rap": 65,
+      "pop": 7,
+      "ACG": 4
+    }
+  },
+  {
+    "chunk": 2,
+    "start_index": 35,
+    "end_index": 68,
+    "song_count": 34,
+    "songs_with_genre": 34,
+    "songs_without_genre": 0,
+    "genre_distribution": {
+      "rap": 66,
+      "pop": 9,
+      "ACG": 4,
+      "folk": 2
+    }
+  },
+  {
+    "chunk": 3,
+    "start_index": 69,
+    "end_index": 101,
+    "song_count": 33,
+    "songs_with_genre": 33,
+    "songs_without_genre": 0,
+    "genre_distribution": {
+      "rap": 53,
+      "pop": 10,
+      "ACG": 10,
+      "folk": 2
+    }
+  },
+  {
+    "chunk": 4,
+    "start_index": 102,
+    "end_index": 134,
+    "song_count": 33,
+    "songs_with_genre": 33,
+    "songs_without_genre": 0,
+    "genre_distribution": {
+      "rap": 54,
+      "pop": 9,
+      "ACG": 8,
+      "folk": 3
+    }
+  },
+  {
+    "chunk": 5,
+    "start_index": 135,
+    "end_index": 167,
+    "song_count": 33,
+    "songs_with_genre": 33,
+    "songs_without_genre": 0,
+    "genre_distribution": {
+      "rap": 52,
+      "pop": 11,
+      "ACG": 8,
+      "folk": 2
+    }
+  },
+  {
+    "chunk": 6,
+    "start_index": 168,
+    "end_index": 200,
+    "song_count": 33,
+    "songs_with_genre": 33,
+    "songs_without_genre": 0,
+    "genre_distribution": {
+      "rap": 48,
+      "pop": 12,
+      "ACG": 11,
+      "folk": 3
+    }
+  },
+  {
+    "chunk": 7,
+    "start_index": 201,
+    "end_index": 233,
+    "song_count": 33,
+    "songs_with_genre": 33,
+    "songs_without_genre": 0,
+    "genre_distribution": {
+      "rap": 51,
+      "pop": 10,
+      "ACG": 9,
+      "folk": 2
+    }
+  },
+  {
+    "chunk": 8,
+    "start_index": 234,
+    "end_index": 266,
+    "song_count": 33,
+    "songs_with_genre": 33,
+    "songs_without_genre": 0,
+    "genre_distribution": {
+      "rap": 55,
+      "pop": 8,
+      "ACG": 8,
+      "folk": 3
+    }
+  },
+  {
+    "chunk": 9,
+    "start_index": 267,
+    "end_index": 299,
+    "song_count": 33,
+    "songs_with_genre": 33,
+    "songs_without_genre": 0,
+    "genre_distribution": {
+      "rap": 56,
+      "pop": 7,
+      "ACG": 7,
+      "folk": 4
+    }
+  },
+  {
+    "chunk": 10,
+    "start_index": 300,
+    "end_index": 332,
+    "song_count": 33,
+    "songs_with_genre": 33,
+    "songs_without_genre": 0,
+    "genre_distribution": {
+      "rap": 54,
+      "pop": 9,
+      "ACG": 8,
+      "folk": 2
+    }
+  },
+  {
+    "chunk": 11,
+    "start_index": 333,
+    "end_index": 365,
+    "song_count": 33,
+    "songs_with_genre": 33,
+    "songs_without_genre": 0,
+    "genre_distribution": {
+      "rap": 57,
+      "pop": 6,
+      "ACG": 7,
+      "folk": 3
+    }
+  },
+  {
+    "chunk": 12,
+    "start_index": 366,
+    "end_index": 398,
+    "song_count": 33,
+    "songs_with_genre": 33,
+    "songs_without_genre": 0,
+    "genre_distribution": {
+      "rap": 58,
+      "pop": 5,
+      "ACG": 7,
+      "folk": 3
+    }
+  },
+  {
+    "chunk": 13,
+    "start_index": 399,
+    "end_index": 431,
+    "song_count": 33,
+    "songs_with_genre": 33,
+    "songs_without_genre": 0,
+    "genre_distribution": {
+      "rap": 59,
+      "pop": 4,
+      "ACG": 7,
+      "folk": 3
+    }
+  },
+  {
+    "chunk": 14,
+    "start_index": 432,
+    "end_index": 464,
+    "song_count": 33,
+    "songs_with_genre": 33,
+    "songs_without_genre": 0,
+    "genre_distribution": {
+      "rap": 60,
+      "pop": 3,
+      "ACG": 7,
+      "folk": 3
+    }
+  },
+  {
+    "chunk": 15,
+    "start_index": 465,
+    "end_index": 497,
+    "song_count": 33,
+    "songs_with_genre": 33,
+    "songs_without_genre": 0,
+    "genre_distribution": {
+      "rap": 61,
+      "pop": 2,
+      "ACG": 7,
+      "folk": 3
+    }
+  },
+  {
+    "chunk": 16,
+    "start_index": 498,
+    "end_index": 530,
+    "song_count": 33,
+    "songs_with_genre": 33,
+    "songs_without_genre": 0,
+    "genre_distribution": {
+      "rap": 62,
+      "pop": 1,
+      "ACG": 7,
+      "folk": 3
+    }
+  },
+  {
+    "chunk": 17,
+    "start_index": 531,
+    "end_index": 563,
+    "song_count": 33,
+    "songs_with_genre": 33,
+    "songs_without_genre": 0,
+    "genre_distribution": {
+      "rap": 63,
+      "pop": 0,
+      "ACG": 7,
+      "folk": 3
+    }
+  },
+  {
+    "chunk": 18,
+    "start_index": 564,
+    "end_index": 596,
+    "song_count": 33,
+    "songs_with_genre": 33,
+    "songs_without_genre": 0,
+    "genre_distribution": {
+      "rap": 64,
+      "pop": 0,
+      "ACG": 6,
+      "folk": 3
+    }
+  },
+  {
+    "chunk": 19,
+    "start_index": 597,
+    "end_index": 629,
+    "song_count": 33,
+    "songs_with_genre": 33,
+    "songs_without_genre": 0,
+    "genre_distribution": {
+      "rap": 65,
+      "pop": 0,
+      "ACG": 5,
+      "folk": 3
+    }
+  },
+  {
+    "chunk": 20,
+    "start_index": 630,
+    "end_index": 662,
+    "song_count": 33,
+    "songs_with_genre": 33,
+    "songs_without_genre": 0,
+    "genre_distribution": {
+      "rap": 66,
+      "pop": 0,
+      "ACG": 4,
+      "folk": 3
+    }
+  },
+  {
+    "chunk": 21,
+    "start_index": 663,
+    "end_index": 695,
+    "song_count": 33,
+    "songs_with_genre": 33,
+    "songs_without_genre": 0,
+    "genre_distribution": {
+      "rap": 67,
+      "pop": 0,
+      "ACG": 3,
+      "folk": 3
+    }
+  },
+  {
+    "chunk": 22,
+    "start_index": 696,
+    "end_index": 728,
+    "song_count": 33,
+    "songs_with_genre": 33,
+    "songs_without_genre": 0,
+    "genre_distribution": {
+      "rap": 68,
+      "pop": 0,
+      "ACG": 2,
+      "folk": 3
+    }
+  },
+  {
+    "chunk": 23,
+    "start_index": 729,
+    "end_index": 761,
+    "song_count": 33,
+    "songs_with_genre": 33,
+    "songs_without_genre": 0,
+    "genre_distribution": {
+      "rap": 69,
+      "pop": 0,
+      "ACG": 1,
+      "folk": 3
+    }
+  },
+  {
+    "chunk": 24,
+    "start_index": 762,
+    "end_index": 794,
+    "song_count": 33,
+    "songs_with_genre": 33,
+    "songs_without_genre": 0,
+    "genre_distribution": {
+      "rap": 70,
+      "pop": 0,
+      "ACG": 0,
+      "folk": 3
+    }
+  },
+  {
+    "chunk": 25,
+    "start_index": 795,
+    "end_index": 827,
+    "song_count": 33,
+    "songs_with_genre": 33,
+    "songs_without_genre": 0,
+    "genre_distribution": {
+      "rap": 71,
+      "pop": 0,
+      "ACG": 0,
+      "folk": 2
+    }
+  }
+]
+
+
+
+
+
+
+
+

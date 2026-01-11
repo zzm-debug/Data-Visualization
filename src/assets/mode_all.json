@@ -1,0 +1,227 @@
+{
+  "name": "World Music Modes",
+  "children": [
+    {
+      "name": "Western",
+      "children": [
+        {
+          "name": "Ancient Greek Modes",
+          "region_origin": "Greece",
+          "year_start": -700,
+          "children": [
+            {"name": "Dorian", "scale_degrees": "1 2 b3 4 5 6 b7"},
+            {"name": "Phrygian", "scale_degrees": "1 b2 b3 4 5 b6 b7"},
+            {"name": "Lydian", "scale_degrees": "1 2 3 #4 5 6 7"},
+            {"name": "Mixolydian", "scale_degrees": "1 2 3 4 5 6 b7"},
+            {"name": "Hypodorian", "scale_degrees": "1 2 b3 4 5 6 b7"},
+            {"name": "Hypophrygian", "scale_degrees": "1 b2 b3 4 5 b6 b7"},
+            {"name": "Hypolydian", "scale_degrees": "1 2 3 #4 5 6 7"},
+            {"name": "Hypomixolydian", "scale_degrees": "1 2 3 4 5 6 b7"},
+            {"name": "Aeolian (Greek)", "scale_degrees": "1 2 b3 4 5 b6 b7"},
+            {"name": "Ionian (Greek)", "scale_degrees": "1 2 3 4 5 6 7"}
+          ]
+        },
+        {
+          "name": "Medieval Church Modes",
+          "region_origin": "Europe",
+          "year_start": 800,
+          "children": [
+            {"name": "Dorian (Church)", "scale_degrees": "1 2 b3 4 5 6 b7"},
+            {"name": "Hypodorian", "scale_degrees": "1 2 b3 4 5 6 b7"},
+            {"name": "Phrygian (Church)", "scale_degrees": "1 b2 b3 4 5 b6 b7"},
+            {"name": "Hypophrygian", "scale_degrees": "1 b2 b3 4 5 b6 b7"},
+            {"name": "Lydian (Church)", "scale_degrees": "1 2 3 #4 5 6 7"},
+            {"name": "Hypolydian", "scale_degrees": "1 2 3 #4 5 6 7"},
+            {"name": "Mixolydian (Church)", "scale_degrees": "1 2 3 4 5 6 b7"},
+            {"name": "Hypomixolydian", "scale_degrees": "1 2 3 4 5 6 b7"}
+          ]
+        },
+        {
+          "name": "Western Tonal System",
+          "region_origin": "Europe",
+          "year_start": 1600,
+          "children": [
+            {"name": "Ionian (Major)", "scale_degrees": "1 2 3 4 5 6 7"},
+            {"name": "Aeolian (Natural Minor)", "scale_degrees": "1 2 b3 4 5 b6 b7"},
+            {"name": "Harmonic Minor", "scale_degrees": "1 2 b3 4 5 b6 7"},
+            {"name": "Melodic Minor Ascending", "scale_degrees": "1 2 b3 4 5 6 7"},
+            {"name": "Melodic Minor Descending", "scale_degrees": "1 2 b3 4 5 b6 b7"},
+            {"name": "Neapolitan Minor", "scale_degrees": "1 b2 b3 4 5 b6 7"},
+            {"name": "Harmonic Major", "scale_degrees": "1 2 3 4 5 b6 7"}
+          ]
+        },
+        {
+          "name": "Jazz Modes",
+          "region_origin": "USA",
+          "year_start": 1900,
+          "children": [
+            {"name": "Blues Scale", "scale_degrees": "1 b3 4 b5 5 b7"},
+            {"name": "Bebop Dominant", "scale_degrees": "1 2 3 4 5 6 b7 7"},
+            {"name": "Bebop Major", "scale_degrees": "1 2 3 4 5 b6 6 7"},
+            {"name": "Dorian b2", "scale_degrees": "1 b2 b3 4 5 6 b7"},
+            {"name": "Lydian Augmented", "scale_degrees": "1 2 3 #4 #5 6 7"},
+            {"name": "Lydian Dominant", "scale_degrees": "1 2 3 #4 5 6 b7"},
+            {"name": "Mixolydian b6", "scale_degrees": "1 2 3 4 5 b6 b7"},
+            {"name": "Locrian Natural 2", "scale_degrees": "1 2 b3 4 b5 b6 b7"},
+            {"name": "Altered Scale", "scale_degrees": "1 b2 b3 b4 b5 b6 b7"}
+          ]
+        },
+        {
+          "name": "Synthetic / Modern",
+          "region_origin": "Europe",
+          "year_start": 1800,
+          "children": [
+            {"name": "Whole Tone", "scale_degrees": "1 2 3 #4 #5 b7"},
+            {"name": "Octatonic / Diminished", "scale_degrees": "W-H 或 H-W（两种对称八声音阶）"},
+            {"name": "Hexatonic", "scale_degrees": "多种六声音阶（如增三和弦六声音阶 1 b3 3 5 b6 7）"},
+            {"name": "Messiaen Mode 1", "scale_degrees": "1 2 3 #4 #5 b7（同 Whole Tone）"},
+            {"name": "Messiaen Mode 2", "scale_degrees": "对称八声音阶（W-H 或 H-W）"},
+            {"name": "Messiaen Mode 3", "scale_degrees": "对称九声音阶（1 2 b3 3 4 #4 5 6 b7）示例"},
+            {"name": "Messiaen Mode 4", "scale_degrees": "限制移调的七声音阶（示例：1 b2 3 4 #4 6 7）"},
+            {"name": "Messiaen Mode 5", "scale_degrees": "限制移调的六声音阶（示例：1 2 3 5 #5 7）"},
+            {"name": "Messiaen Mode 6", "scale_degrees": "限制移调的七声音阶（示例：1 b2 3 4 5 b6 7）"},
+            {"name": "Messiaen Mode 7", "scale_degrees": "限制移调的七声音阶（示例：1 2 b3 3 4 5 6）"}
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Arabic & Persian",
+      "children": [
+        {
+          "name": "Arabic Maqam",
+          "region_origin": "Middle East",
+          "year_start": 900,
+          "children": [
+            {"name": "Maqam Rast", "scale_degrees": null, "note": "含中性3与中性7；依 tetrachord 组合（Rast+Rast），非 12TET"},
+            {"name": "Maqam Bayati", "scale_degrees": "1 b2 b3 4 5 6 b7（12TET 近似）", "note": "实际含半降二与半降三（中性），此为近似"},
+            {"name": "Maqam Hijaz", "scale_degrees": "1 b2 3 4 5 b6 7（12TET 近似）", "note": "上行 tetrachord Hijaz 特征 1–b2–3–4，微分音可变"},
+            {"name": "Maqam Kurd", "scale_degrees": "1 b2 b3 4 5 b6 b7（≈ Phrygian）"},
+            {"name": "Maqam Saba", "scale_degrees": null, "note": "特征性微分音与进行，非 12TET"},
+            {"name": "Maqam Nahawand", "scale_degrees": "1 2 b3 4 5 b6 b7（≈ Aeolian）"},
+            {"name": "Maqam Ajam", "scale_degrees": "1 2 3 4 5 6 7（≈ Ionian）"},
+            {"name": "Maqam Sikah", "scale_degrees": null, "note": "主音为中性三度（E 半降等），非 12TET"},
+            {"name": "Maqam Iraq", "scale_degrees": null, "note": "Sikah 族，含中性音，非 12TET"},
+            {"name": "Maqam Hijazkar", "scale_degrees": "1 b2 3 4 5 b6 7（12TET 近似）", "note": "Hijaz + 和声小调风格的 7 度"},
+            {"name": "Maqam Huzam", "scale_degrees": null, "note": "Sikah 分支，依 jins 组合；非 12TET"}
+          ]
+        },
+        {
+          "name": "Persian Dastgah",
+          "region_origin": "Iran",
+          "year_start": 1200,
+          "children": [
+            {"name": "Dastgah Shur", "scale_degrees": null, "note": "依 gushe/maqam 旋律类型，常含中性音，非 12TET"},
+            {"name": "Dastgah Mahur", "scale_degrees": "1 2 3 4 5 6 7（≈ 大调近似）", "note": "实际含装饰性微分音"},
+            {"name": "Dastgah Segah", "scale_degrees": null, "note": "主音中性三度，非 12TET"},
+            {"name": "Dastgah Chahargah", "scale_degrees": null, "note": "含特定中性与微分音框架，非 12TET"},
+            {"name": "Dastgah Nava", "scale_degrees": "1 2 b3 4 5 b6 b7（12TET 近似）", "note": "旋律规格 > 音阶集合"},
+            {"name": "Dastgah Rast-Panjgah", "scale_degrees": null, "note": "与 Rast 相关，含中性音；非 12TET"}
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Indian",
+      "children": [
+        {
+          "name": "Hindustani Raga",
+          "region_origin": "North India",
+          "year_start": 500,
+          "children": [
+            {"name": "Raga Bhairav", "scale_degrees": "1 b2 3 4 5 b6 7（thaat 近似）", "note": "实际上/下行及主音级进有定式"},
+            {"name": "Raga Yaman", "scale_degrees": "1 2 3 #4 5 6 7（≈ Lydian）"},
+            {"name": "Raga Bhimpalasi", "scale_degrees": "1 2 b3 4 5 6 b7（Kafi 系近似）"},
+            {"name": "Raga Kafi", "scale_degrees": "1 2 b3 4 5 6 b7（Kafi thaat）"},
+            {"name": "Raga Todi", "scale_degrees": "1 b2 b3 #4 5 b6 7（Todi thaat 近似）"},
+            {"name": "Raga Darbari", "scale_degrees": "1 2 b3 4 5 b6 b7（Asavari/Kanada 系近似）"},
+            {"name": "Raga Multani", "scale_degrees": "1 b2 b3 #4 5 b6 7（Todi 系近似）"},
+            {"name": "Raga Marwa", "scale_degrees": "1 b2 3 #4 5 6 7（Marwa thaat）"},
+            {"name": "Raga Asavari", "scale_degrees": "1 2 b3 4 5 b6 b7（自然小调系）"},
+            {"name": "Raga Khamaj", "scale_degrees": "1 2 3 4 5 6 b7（Mixolydian）"}
+          ]
+        },
+        {
+          "name": "Carnatic Raga",
+          "region_origin": "South India",
+          "year_start": 1500,
+          "children": [
+            {"name": "Raga Kalyani", "scale_degrees": "1 2 3 #4 5 6 7（Melakarta 65）"},
+            {"name": "Raga Mayamalavagowla", "scale_degrees": "1 2 b3 4 5 b6 7"},
+            {"name": "Raga Shankarabharanam", "scale_degrees": "1 2 3 4 5 6 7（≈ 大调）"},
+            {"name": "Raga Harikambhoji", "scale_degrees": "1 2 3 4 5 6 b7（Mixolydian）"},
+            {"name": "Raga Natabhairavi", "scale_degrees": "1 2 b3 4 5 b6 b7（自然小调）"},
+            {"name": "Raga Charukesi", "scale_degrees": "1 2 3 4 5 b6 7"},
+            {"name": "Raga Mohanam", "scale_degrees": "1 2 3 5 6（大调五声音阶）"},
+            {"name": "Raga Kharaharapriya", "scale_degrees": "1 2 b3 4 5 6 b7（Dorian）"},
+            {"name": "Raga Hamsadhwani", "scale_degrees": "1 2 3 5 7（五声音阶）"}
+          ]
+        }
+      ]
+    },
+    {
+      "name": "East Asia",
+      "children": [
+        {
+          "name": "Chinese Pentatonic",
+          "region_origin": "China",
+          "year_start": -2000,
+          "children": [
+            {"name": "Gong", "scale_degrees": "1 2 3 5 6（宫调式）"},
+            {"name": "Shang", "scale_degrees": "1 2 4 5 6（商调式，五声旋转）"},
+            {"name": "Jue", "scale_degrees": "1 3 4 5 7（角调式，五声旋转）"},
+            {"name": "Zhi", "scale_degrees": "1 2 3 5 b7（徵调式；近似旋转）"},
+            {"name": "Yu", "scale_degrees": "1 2 b3 5 6（羽调式；近似旋转）"},
+            {"name": "Qingjue", "scale_degrees": "1 3 4 5 6（清角；地区与时代有变体）"},
+            {"name": "Bianzhi", "scale_degrees": "1 2 3 #4 6（变徵；近似）"}
+          ]
+        },
+        {
+          "name": "Japanese Scales",
+          "region_origin": "Japan",
+          "year_start": 700,
+          "children": [
+            {"name": "In Scale", "scale_degrees": "1 b2 4 5 b6"},
+            {"name": "Yo Scale", "scale_degrees": "1 2 4 5 6"},
+            {"name": "Ritsu", "scale_degrees": "1 2 4 5 6（雅乐系近似）"},
+            {"name": "Ryo", "scale_degrees": "1 2 3 5 6（大调五声）"},
+            {"name": "Okinawan Scale", "scale_degrees": "1 3 4 5 7（琉球音阶）"}
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Southeast Asia",
+      "children": [
+        {
+          "name": "Gamelan",
+          "region_origin": "Indonesia",
+          "year_start": 800,
+          "children": [
+            {"name": "Slendro", "scale_degrees": null, "note": "五等分近似的五声音系；非 12TET"},
+            {"name": "Pelog", "scale_degrees": null, "note": "七声音系但音距不等；常取 5/6 声子集，非 12TET"},
+            {"name": "Manyura", "scale_degrees": null, "note": "Pelog/Slendro 调式中的旋法之一，音高系非 12TET"},
+            {"name": "Sanga", "scale_degrees": null, "note": "加美兰旋法，依乐队定弦与曲调变化"}
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Africa",
+      "children": [
+        {
+          "name": "African Modal Systems",
+          "region_origin": "Sub-Saharan Africa",
+          "year_start": -2000,
+          "children": [
+            {"name": "Anhemitonic Pentatonic", "scale_degrees": "1 2 3 5 6"},
+            {"name": "Hexatonic African", "scale_degrees": "1 2 3 4 5 6（常见六声音阶之一）"},
+            {"name": "Equiheptatonic African", "scale_degrees": null, "note": "七等分式的近似观念，非 12TET"},
+            {"name": "West African Modal", "scale_degrees": "1 2 3 5 6 或 1 2 b3 5 6（地域多样）"},
+            {"name": "Central African Modal", "scale_degrees": "1 2 3 5 6（常见无半音五声）"}
+          ]
+        }
+      ]
+    }
+  ]
+}

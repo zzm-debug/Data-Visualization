@@ -1,0 +1,42 @@
+{
+  "Folk": {
+    "total_plays": 44580532,
+    "total_comments": 112595,
+    "song_count": 50
+  },
+  "Pop": {
+    "total_plays": 3393742080,
+    "total_comments": 12806829,
+    "song_count": 50
+  },
+  "Rock": {
+    "total_plays": 186807824,
+    "total_comments": 5122030,
+    "song_count": 50
+  },
+  "Rap": {
+    "total_plays": 519658432,
+    "total_comments": 267719,
+    "song_count": 50
+  },
+  "Electronic": {
+    "total_plays": 405760640,
+    "total_comments": 185764,
+    "song_count": 50
+  },
+  "Classical": {
+    "total_plays": 74785024,
+    "total_comments": 383731,
+    "song_count": 50
+  },
+  "Jazz": {
+    "total_plays": 28298645,
+    "total_comments": 98685,
+    "song_count": 50
+  },
+  "ACG": {
+    "total_plays": 89843048,
+    "total_comments": 95537,
+    "song_count": 50
+  }
+}

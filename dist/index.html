@@ -1,0 +1,727 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Global Music Insights Dashboard</title>
+
+  <!-- D3（本地，避免部分网络环境拦截 CDN 导致树图不显示） & TopoJSON -->
+  <script src="/d3-global.5f965d84.js"></script>
+  <script src="https://unpkg.com/topojson@3"></script>
+
+  <!-- Three.js for 3D visualization -->
+  <script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.160.0/examples/js/controls/OrbitControls.js"></script>
+
+  <!-- 引入样式 (如果有) -->
+  <link rel="stylesheet" href="/style.e308ff8e.css">
+
+  <style>/* ==============================
+       1. 紫色电音 / 赛博主题（可替换）
+       ============================== */
+    :root {
+      /* base */
+      --bg-color: #070312;
+      --bg-0: #070312;
+      --bg-1: #0b0520;
+      --bg-2: #1a0b3d;
+      --bg-3: #120a2c;
+      
+      /* 浅色文字，适应深色背景 */
+      --text-main: #e2e8f0;      
+      --text-muted: #94a3b8;     
+      
+      /* accent: violet / magenta / electric blue */
+      --accent-color: #7c3aed;
+      --accent-violet: #7c3aed;
+      --accent-pink: #ff3bd4;
+      --accent-blue: #32a7ff;
+      --accent-cyan: #00fff0;
+
+      /* panels */
+      --panel-bg: rgba(18, 8, 42, 0.62);
+      --panel-border: rgba(255, 59, 212, 0.22);
+      --panel-border-2: rgba(50, 167, 255, 0.22);
+      --panel-glow: rgba(124, 58, 237, 0.22);
+      --panel-inner: rgba(255, 255, 255, 0.08);
+
+      /* chart text/axis readability (for dark cyber background) */
+      --axis-text: rgba(226, 232, 240, 0.78);
+      --axis-text-strong: rgba(226, 232, 240, 0.88);
+      --axis-line: rgba(50, 167, 255, 0.28);
+      --axis-grid: rgba(50, 167, 255, 0.12);
+      
+      /* 模块间距 */
+      /* 模块间距：适当缩小，让图表区更“撑满” */
+      --panel-gap: 14px;         
+      
+      /* ===== 新增：设计稿基准尺寸 ===== */
+      --design-width: 1920;
+      --design-height: 1080;
+    }
+
+    /* ===== 新增：外层容器用于缩放 ===== */
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background-color: var(--bg-color);
+    }
+
+    /* ==============================
+       背景根容器（与图表解耦）
+       ============================== */
+    #bg-root{
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    /* 第1层：基础背景层（渐变 + 低频高光） */
+    .bg-base{
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(circle at 18% 28%, rgba(255, 59, 212, 0.14) 0%, transparent 52%),
+        radial-gradient(circle at 82% 68%, rgba(50, 167, 255, 0.12) 0%, transparent 55%),
+        radial-gradient(circle at 52% 92%, rgba(124, 58, 237, 0.10) 0%, transparent 55%),
+        linear-gradient(135deg,
+          var(--bg-0) 0%,
+          var(--bg-1) 22%,
+          var(--bg-2) 50%,
+          var(--bg-3) 78%,
+          var(--bg-0) 100%
+        );
+      filter: saturate(1.12) contrast(1.04);
+    }
+
+    /* ==============================
+       第2、3层：Canvas 背景层（动态能量/纹理）
+       ============================== */
+    .bg-layer,
+    .bg-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none; /* 不影响交互 */
+    }
+
+    /* 缩放包装器 */
+    .scale-wrapper {
+      width: 1920px;
+      height: 1080px;
+      transform-origin: top left;
+      /* transform 由 JS 动态设置 */
+    }
+
+    .dashboard-container {
+      font-family: "Segoe UI", "Microsoft YaHei", sans-serif;
+      background: transparent;
+      color: var(--text-main);
+      padding: 8px;
+      width: 100%;
+      height: 100%;
+      box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      z-index: 10;
+    }
+
+    /* 顶部标题栏 */
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 10px;
+      border-bottom: 1px solid rgba(255, 59, 212, 0.22);
+      margin-bottom: 14px;
+      flex-shrink: 0;
+    }
+
+    h1 { 
+      margin: 0; 
+      font-size: 26px; 
+      font-weight: 600; 
+      color: var(--text-main); 
+      letter-spacing: 1px;
+      text-shadow:
+        0 0 12px rgba(255, 59, 212, 0.25),
+        0 0 22px rgba(50, 167, 255, 0.18);
+    }
+    .subtitle { 
+      font-size: 14px; 
+      color: var(--text-muted); 
+      margin-left: 10px;
+    }
+
+    /* ==============================
+       2. 核心布局：3列结构 (Left / Center / Right)
+       ============================== */
+    .dashboard-grid {
+      flex: 1; 
+      display: grid;
+      /* 比例：左侧 1fr，中间树图给宽一点 1.3fr，右侧 1fr */
+      grid-template-columns: 0.8fr 1.8fr 0.8fr;
+      gap: var(--panel-gap);
+      min-height: 0;
+    }
+
+    /* 列容器 */
+    .column {
+      display: flex;
+      flex-direction: column;
+      gap: var(--panel-gap);
+      height: 100%;
+      min-height: 0;
+    }
+
+    /* ==============================
+       3. 图表面板 (科技风半透明卡片)
+       ============================== */
+    .chart-panel {
+      flex: 1; /* 自动撑满列高 */
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      
+      /* 科技风半透明深色卡片 */
+      background: var(--panel-bg);
+      border: 1px solid rgba(255, 59, 212, 0.18);
+      border-radius: 8px;
+      /* 面板内边距稍微收紧，释放图表空间 */
+      padding: 12px;
+      backdrop-filter: blur(10px);
+      box-shadow: 
+        0 8px 32px rgba(0, 0, 0, 0.3),
+        inset 0 1px 0 var(--panel-inner),
+        0 0 18px var(--panel-glow);
+      overflow: hidden;
+      min-height: 0;
+    }
+
+    /* 面板轻微“霓虹边”效果（很克制，保证可读性） */
+    .chart-panel::marker { content: none; }
+    .chart-panel .neon-border{ display:none; }
+    .chart-panel::selection{ background: rgba(255,59,212,0.25); }
+
+    /* 面板四角 L 形装饰 */
+    .chart-panel::before,
+    .chart-panel::after {
+      content: '';
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      border: 2px solid rgba(50, 167, 255, 0.45);
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .chart-panel::before {
+      top: 0;
+      left: 0;
+      border-right: none;
+      border-bottom: none;
+    }
+
+    .chart-panel::after {
+      bottom: 0;
+      right: 0;
+      border-left: none;
+      border-top: none;
+    }
+
+    .panel-header {
+      /* 标题区域略收紧，减少占用 */
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-main);
+      margin-bottom: 6px;
+      padding-left: 0;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      border-bottom: 1px solid rgba(88, 101, 242, 0.2);
+      padding-bottom: 6px;
+    }
+    /* 标题前的小圆点装饰 */
+    .panel-header::before {
+      content: '';
+      width: 8px;
+      height: 8px;
+      background-color: var(--accent-pink);
+      border-radius: 50%;
+      display: inline-block;
+      box-shadow: 0 0 10px rgba(255, 59, 212, 0.55);
+    }
+
+    .chart-content {
+      flex: 1;
+      width: 100%;
+      height: 100%;
+      position: relative;
+    }
+
+    /* ==============================
+       Tree Legend (HTML overlay, rebuilt)
+       ============================== */
+    .tree-legend{
+      position:absolute;
+      top: 8px;
+      left: 8px;
+      z-index: 5;
+      width: min(280px, 72%);
+      max-width: 92%;
+      background: rgba(2, 6, 23, 0.72);
+      border: 1px solid rgba(88, 101, 242, 0.45);
+      border-radius: 10px;
+      padding: 6px 8px;
+      color: var(--text-main);
+      box-shadow:
+        0 0 18px rgba(124, 58, 237, 0.22),
+        inset 0 1px 0 var(--panel-inner);
+      backdrop-filter: blur(8px);
+      user-select: none;
+    }
+    .tree-legend > summary{
+      list-style: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 2px 2px;
+      outline: none;
+    }
+    .tree-legend > summary::-webkit-details-marker{ display:none; }
+    .tree-legend-caret{
+      font-size: 12px;
+      font-weight: 900;
+      color: var(--text-main);
+      line-height: 1;
+    }
+    .tree-legend-body{
+      margin-top: 6px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      max-height: 240px;
+      overflow: auto;
+      padding-right: 2px;
+    }
+    .tree-legend-item{
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      width: 100%;
+      padding: 6px 8px;
+      border-radius: 9px;
+      border: 1px solid rgba(255,255,255,0.10);
+      background: rgba(255,255,255,0.02);
+      color: var(--text-main);
+      cursor: pointer;
+      font: 12px/1.1 system-ui, -apple-system, Segoe UI, Microsoft YaHei, sans-serif;
+      text-align: left;
+      transition: background 0.15s ease, border-color 0.15s ease, transform 0.15s ease;
+    }
+    .tree-legend-item:hover{
+      background: rgba(255,255,255,0.06);
+      border-color: rgba(50, 167, 255, 0.22);
+      transform: translateY(-1px);
+    }
+    .tree-legend-item:active{
+      transform: translateY(0);
+    }
+    .tree-legend-item.is-off{
+      opacity: 0.22;
+    }
+    .tree-legend-swatch{
+      width: 10px;
+      height: 10px;
+      border-radius: 999px;
+      flex: 0 0 auto;
+      box-shadow: 0 0 10px rgba(255,255,255,0.18);
+      border: 1px solid rgba(226,232,240,0.35);
+    }
+    .tree-legend-label{
+      flex: 1;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      color: var(--text-main);
+      opacity: 0.95;
+    }
+    .tree-legend-label-empty{
+      min-height: 1em;
+    }
+    .tree-legend-count{
+      flex: 0 0 auto;
+      color: var(--text-muted);
+      font-variant-numeric: tabular-nums;
+      opacity: 0.9;
+    }
+
+    .chart-svg{
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    /* 图片自适应 */
+    .chart-img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain; /* 保持比例 */
+      display: block;
+      /* 稍微降低一点点透明度，让图片像印在纸上一样 (可选) */
+      opacity: 0.95; 
+    }
+
+    /* 词云容器：填满 panel 的 chart-content */
+    .wordcloud-root{
+      width: 100%;
+      height: 100%;
+      position: relative;
+      overflow: hidden;
+    }
+    .wordcloud-root svg{
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+    
+    #heatmap { display: flex; align-items: center; justify-content: center; }
+
+    /* ==============================
+       4. D3 图表浅色适配 (Light Theme Override)
+       这里把原来针对深色背景的白色文字，改回深色文字
+       ============================== */
+    
+    /* 坐标轴文字改为浅色（适应深色背景） */
+    svg text { 
+      fill: var(--axis-text) !important; 
+      font-family: sans-serif;
+    }
+    
+    /* 坐标轴线条改为低对比度 */
+    .domain, .tick line {
+      stroke: var(--axis-line) !important;
+    }
+
+    /* 坐标轴/标签：再加一点“深色描边”，提升可读性但不刺眼 */
+    .axis-label,
+    .x-axis text,
+    .y-axis text,
+    .legend text {
+      fill: var(--axis-text-strong) !important;
+      paint-order: stroke;
+      stroke: rgba(7, 3, 18, 0.72);
+      stroke-width: 2.2px;
+      stroke-linejoin: round;
+    }
+    
+    /* ===== 修复：地图国家样式 ===== */
+    /* 移除 fill: #ffffff，让JS动态设置的颜色生效 */
+    .country { 
+      /* fill 由 JS 动态设置，这里不再指定 */
+      stroke: transparent;              /* 默认不描边 */
+      stroke-width: 0.5px; 
+      transition: fill 0.2s, stroke 0.2s, stroke-width 0.2s; 
+      cursor: pointer;
+    }
+    .country:hover { 
+      stroke: rgba(226, 232, 240, 0.92); /* 悬停白色描边 */
+      stroke-width: 1.2px;
+      filter: brightness(1.08);
+    }
+
+    /* ===== 新增：地图容器样式 ===== */
+    #map {
+      position: relative;
+      width: 100%;
+      height: 100%;
+    }
+    
+    #map svg {
+      width: 100%;
+      height: 100%;
+    }
+
+    /* ===== 新增：图例样式（科技风） ===== */
+    #legend {
+      position: absolute;
+      bottom: 10px;
+      left: 10px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      max-width: 90%;
+      background: rgba(18, 8, 42, 0.82);
+      border: 1px solid rgba(50, 167, 255, 0.28);
+      padding: 10px 12px;
+      border-radius: 6px;
+      font-size: 12px;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 0 18px rgba(255, 59, 212, 0.16), 0 0 24px rgba(50, 167, 255, 0.12);
+      color: #e2e8f0; /* 默认文字颜色 */
+    }
+    
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      white-space: nowrap;
+      color: #e2e8f0; /* 确保文字颜色清晰 */
+    }
+    
+    .legend-color {
+      width: 14px;
+      height: 14px;
+      border-radius: 3px;
+      display: inline-block;
+      border: 1px solid rgba(255, 255, 255, 0.2); /* 添加边框增强可见性 */
+      box-shadow: 0 0 4px rgba(0, 0, 0, 0.3);
+    }
+    
+    .legend-text {
+      color: #e2e8f0;
+      font-weight: 500;
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+    }
+
+    /* Tooltip 样式（科技风） */
+    .tooltip, .map-tooltip, .tree-tooltip, .bubble-tooltip, .heatmap-tooltip {
+      position: fixed;
+      background: rgba(18, 8, 42, 0.92) !important;
+      color: var(--text-main) !important;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.5), 0 0 20px rgba(255, 59, 212, 0.18), 0 0 26px rgba(50, 167, 255, 0.12);
+      border: 1px solid rgba(50, 167, 255, 0.32);
+      padding: 6px 10px; 
+      border-radius: 4px; 
+      pointer-events: none;
+      font-size: 13px;
+      z-index: 1000;
+      backdrop-filter: blur(10px);
+    }
+    
+    /* 图例文字 */
+    #bubble-legend { color: var(--text-muted); }
+    
+    /* 地图面板不要额外上边距：否则左上会出现明显空白 */
+    #panel-map {
+      margin-top: 0;
+    }
+    
+    /* 热力图相应缩小 */
+    #panel-heatmap {
+      flex: 0.8;
+    }
+
+    /* ===== 热力图布局：上图下图例 ===== */
+    .heatmap-layout{
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      min-height: 0;
+    }
+    .heatmap-stage{
+      flex: 1;
+      min-height: 0;
+      position: relative;
+    }
+    .heatmap-color-legend{
+      flex: 0 0 auto;
+      padding: 8px 10px;
+      border-radius: 10px;
+      background: rgba(18, 8, 42, 0.55);
+      border: 1px solid rgba(50, 167, 255, 0.22);
+      box-shadow: 0 0 18px rgba(255, 59, 212, 0.10), 0 0 24px rgba(50, 167, 255, 0.08);
+      color: rgba(226, 232, 240, 0.85);
+      backdrop-filter: blur(10px);
+    }
+    .heatmap-color-legend .legend-title{
+      font-size: 11px;
+      color: rgba(226, 232, 240, 0.78);
+      margin-bottom: 6px;
+      letter-spacing: 0.2px;
+    }
+    .heatmap-color-legend .legend-bar{
+      height: 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.18);
+      box-shadow: 0 0 10px rgba(50,167,255,0.12), 0 0 14px rgba(255,59,212,0.10);
+    }
+    .heatmap-color-legend .legend-labels{
+      display: flex;
+      justify-content: space-between;
+      margin-top: 6px;
+      font-size: 11px;
+      color: rgba(226, 232, 240, 0.82);
+    }</style>
+<script src="/style.e308ff8e.js"></script></head>
+
+<body>
+
+  <!-- 背景层（与图表解耦，可开关/可替换主题） -->
+  <div id="bg-root">
+    <div class="bg-base"></div>
+  </div>
+
+  <!-- ===== 新增：缩放包装器 ===== -->
+  <div class="scale-wrapper" id="scaleWrapper">
+    <div class="dashboard-container">
+
+      <header>
+        <div>
+          <h1>GLOBAL MUSIC TRENDS</h1>
+          <span class="subtitle">2023 - 2025 音乐流派可视化</span>
+        </div>
+        <!-- 右上角小字 -->
+        <div style="font-size:12px; opacity:0.65; color:var(--text-muted);">Data Source: Internal Analytics</div>
+      </header>
+
+      <!-- 核心布局 -->
+      <main class="dashboard-grid">
+
+        <!-- 【第一列】地图 & 热力 -->
+        <div class="column">
+          <!-- 1. 世界地图 -->
+          <div id="panel-map" class="chart-panel">
+            <div class="panel-header">Geographic Distribution</div>
+            <div class="chart-content">
+              <div id="map"></div>
+              <div id="legend"></div>
+            </div>
+          </div>
+
+          <!-- 2. 热力图 -->
+          <div id="panel-heatmap" class="chart-panel">
+            <div class="panel-header">
+              Trend Heatmap
+              <button id="heatmap-toggle" class="heatmap-toggle-btn" title="切换2D/3D视图" style="margin-left: auto; padding: 4px 8px; font-size: 12px; border: 1px solid rgba(88, 101, 242, 0.5); background: rgba(15, 23, 42, 0.8); color: #e2e8f0; border-radius: 4px; cursor: pointer;">
+                <span class="toggle-text">3D</span>
+              </button>
+            </div>
+            <div class="chart-content heatmap-layout">
+              <div class="heatmap-stage">
+                <!-- 3D热力图容器 -->
+                <div id="heatmap-3d" class="heatmap-container" style="width:100%; height:100%;"></div>
+                <!-- 2D热力图容器 -->
+                <div id="heatmap-2d" class="heatmap-container" style="display: none; width:100%; height:100%;"></div>
+              </div>
+              <!-- 颜色映射图例（2D/3D 共用） -->
+              <div id="heatmap-color-legend" class="heatmap-color-legend"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 【第二列】C位：径向树 -->
+        <div class="column">
+          <div id="panel-tree" class="chart-panel">
+            <div class="panel-header">
+              Genre Hierarchy
+              <button id="tree-toggle" class="heatmap-toggle-btn" title="切换树图视图" style="margin-left: auto; padding: 4px 8px; font-size: 12px; border: 1px solid rgba(88, 101, 242, 0.5); background: rgba(15, 23, 42, 0.8); color: #e2e8f0; border-radius: 4px; cursor: pointer;">
+                <span class="toggle-text">主</span>
+              </button>
+            </div>
+            <div class="chart-content">
+              <svg id="tree" style="width:100%; height:100%;"></svg>
+            </div>
+          </div>
+        </div>
+
+        <!-- 【第三列】气泡 & 图片1 & 图片2 -->
+        <div class="column">
+          <!-- 1. 气泡图 -->
+          <div id="panel-bubble" class="chart-panel">
+            <div class="panel-header">Impact Bubbles</div>
+            <div class="chart-content">
+              <div id="bubble-wrap" style="width:100%; height:100%;">
+                <svg id="bubble-svg" preserveAspectRatio="xMidYMid meet" style="width:100%; height:100%;"></svg>
+              </div>
+              <div id="bubble-legend"></div>
+              <div id="bubble-tooltip" class="tooltip"></div>
+            </div>
+          </div>
+
+          <!-- 2. 词云图片 -->
+          <div id="panel-img-1" class="chart-panel">
+            <div class="panel-header">Word Cloud Analysis</div>
+            <div class="chart-content">
+              <div id="wordcloud" class="wordcloud-root" aria-label="Word Cloud"></div>
+            </div>
+          </div>
+
+          <!-- 3. 柱状图图片 -->
+          <div id="panel-img-2" class="chart-panel">
+            <div class="panel-header">Statistical Ranking</div>
+            <div class="chart-content">
+              <svg id="genre-bar-svg" class="chart-svg" preserveAspectRatio="xMidYMid meet"></svg>
+            </div>
+          </div>
+        </div>
+
+      </main>
+
+    </div>
+  </div>
+
+  <!-- ===== 新增：等比缩放脚本 ===== -->
+  <script>(function () {
+  // 设计稿尺寸
+  var DESIGN_WIDTH = 1920;
+  var DESIGN_HEIGHT = 1080;
+  var wrapper = document.getElementById('scaleWrapper');
+  function resize() {
+    // 获取当前窗口尺寸
+    var windowWidth = window.innerWidth;
+    var windowHeight = window.innerHeight;
+
+    // 等比缩放：完整显示（contain）
+    var scaleX = windowWidth / DESIGN_WIDTH;
+    var scaleY = windowHeight / DESIGN_HEIGHT;
+    var scale = Math.min(scaleX, scaleY);
+
+    // 应用缩放
+    wrapper.style.transform = "scale(".concat(scale, ")");
+
+    // 居中显示（如果有空白区域）
+    var scaledWidth = DESIGN_WIDTH * scale;
+    var scaledHeight = DESIGN_HEIGHT * scale;
+    var offsetX = (windowWidth - scaledWidth) / 2;
+    var offsetY = (windowHeight - scaledHeight) / 2;
+    wrapper.style.marginLeft = offsetX + 'px';
+    wrapper.style.marginTop = offsetY + 'px';
+  }
+
+  // 初始化和监听窗口变化
+  window.addEventListener('resize', resize);
+  window.addEventListener('load', resize);
+  resize(); // 立即执行一次
+})();</script>
+
+  <!-- 紫色电音 / 赛博背景（独立视觉层） -->
+  <script src="/cyber-background.70e797d7.js"></script>
+
+  <!-- 脚本引用 -->
+  <script src="/app.c328ef1a.js"></script>
+  <script src="/tree.ee3f47e3.js"></script>
+  <script src="/heatmap-toggle.f5ad3185.js"></script>
+  <!-- 同时加载两个热力图脚本，提前渲染 -->
+  <script src="/heatmap.fa2103d8.js"></script>
+  <script src="/heatmap-2D.c8aec00e.js"></script>
+  <!-- 柱状图：独立脚本（优先 require 打包 JSON，避免 build 后 /assets 丢失导致加载失败） -->
+  <script src="/genre-bar-chart.05a0cf65.js"></script>
+  <script src="/script.75da7f30.js"></script>
+  
+  <!-- SVG 交互功能：hover 放大 + 点击新窗口打开 -->
+  <script src="/svg-interaction.32e1ddb0.js"></script>
+</body>
+</html>

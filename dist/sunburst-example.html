@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>音乐风格可视化仪表盘</title>
+
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+  <script src="https://unpkg.com/topojson@3"></script>
+
+  <style>body {
+      font-family: "Microsoft YaHei", "Helvetica", sans-serif;
+      background-color: #f0f2f5;
+      margin: 0;
+      padding: 0;
+    }
+
+    header {
+      text-align: center;
+      background: linear-gradient(120deg, #5b86e5, #36d1dc);
+      color: white;
+      padding: 40px 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 30px;
+      font-weight: 600;
+    }
+
+    header p {
+      margin-top: 10px;
+      font-size: 15px;
+      opacity: 0.9;
+    }
+
+    .dashboard {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-gap: 30px;
+      max-width: 1500px;
+      margin: 40px auto;
+      padding: 0 20px;
+    }
+
+    .card {
+      background: white;
+      border-radius: 15px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      padding: 25px;
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.2s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-4px);
+    }
+
+    .card h2 {
+      text-align: center;
+      color: #333;
+      font-size: 20px;
+      margin-bottom: 5px;
+    }
+
+    .description {
+      text-align: center;
+      color: #666;
+      font-size: 13px;
+      margin-bottom: 15px;
+    }
+
+    /* SVGs */
+    #bubble-svg, #tree, #heatmap, #map {
+      width: 100%;
+      height: 500px;
+      display: block;
+    }
+
+    #map {
+      height: 480px;
+    }
+
+    /* Tooltip */
+    .tooltip, .map-tooltip {
+      position: absolute;
+      background: rgba(0, 0, 0, 0.85);
+      color: white;
+      padding: 8px 10px;
+      border-radius: 6px;
+      font-size: 12px;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.15s;
+      z-index: 1000;
+    }
+
+    .legend {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 10px;
+      flex-wrap: wrap;
+      font-size: 12px;
+      color: #666;
+    }
+
+    .legend-item { display: flex; align-items: center; gap: 5px; }
+    .legend-color { width: 12px; height: 12px; border-radius: 3px; display: inline-block; }
+
+    /* 响应式：小屏幕变单列 */
+    @media (max-width: 1000px) {
+      .dashboard {
+        grid-template-columns: 1fr;
+      }
+    }</style>
+</head>
+
+<body>
+  <header>
+    <h1>音乐风格可视化仪表盘</h1>
+    <p>气泡图 · 径向树 · 热力图 · 世界地图</p>
+  </header>
+
+  <div class="dashboard">
+    <!-- 气泡图 -->
+    <div class="card">
+      <h2>🎈 音乐风格气泡图</h2>
+      <p class="description">X：播放量（对数），Y：评论量（对数），气泡大小：影响力得分，颜色：音乐风格</p>
+      <svg id="bubble-svg"></svg>
+      <div id="bubble-legend" class="legend"></div>
+      <div id="bubble-tooltip" class="tooltip"></div>
+    </div>
+
+    <!-- 径向树 -->
+    <div class="card">
+      <h2>🌿 径向树布局（音乐流派可视化）</h2>
+      <p class="description">展示音乐风格层级结构与关联关系</p>
+      <svg id="tree"></svg>
+    </div>
+
+    <!-- 热力图 -->
+    <div class="card">
+      <h2>🔥 八大音乐流派月度热力图 (2023-12 至 2025-12)</h2>
+      <div id="heatmap"></div>
+    </div>
+
+    <!-- 世界地图 -->
+    <div class="card">
+      <h2>🌏 全球主导音乐类型分布图</h2>
+      <div id="map"></div>
+      <div id="legend" class="legend"></div>
+      <div id="map-tooltip" class="map-tooltip"></div>
+    </div>
+  </div>
+
+  <!-- JS 引入 -->
+  <script src="/app.c328ef1a.js"></script>
+  <script src="/tree.ee3f47e3.js"></script>
+  <script src="/heatmap.fa2103d8.js"></script>
+  <script src="/script.75da7f30.js"></script>
+</body>
+</html>

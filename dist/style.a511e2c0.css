@@ -1,0 +1,455 @@
+/* =========================================================
+   0) 统一色调（护眼学术风：暖米色 + 冷蓝灰强调）
+========================================================= */
+:root{
+  --bg-main: #F1EDE3;
+  --bg-card: #F7F4EC;
+  --text-main: #243447;
+  --text-secondary: #5E6B78;
+  --text-muted: #8A96A3;
+  --accent: #3A6EA5;
+
+  --gap: 18px;
+
+  --card-border: rgba(0,0,0,0.06);
+  --card-radius: 16px;
+  --card-shadow: 0 10px 26px rgba(0,0,0,0.06);
+}
+
+/* =========================================================
+   1) 全局
+========================================================= */
+html,body{
+  margin:0;
+  height:100%;
+  background:var(--bg-main);
+  font-family:"Inter","Segoe UI","Microsoft YaHei",sans-serif;
+  color:var(--text-main);
+  overflow:auto;
+}
+
+.dashboard-container{
+  padding:20px;
+  box-sizing:border-box;
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
+  gap:var(--gap);
+}
+
+/* =========================================================
+   2) Header（更有艺术感：字距 + 层级）
+========================================================= */
+.header{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-end;
+  padding-bottom:12px;
+  border-bottom:1px solid rgba(0,0,0,0.06);
+}
+
+.title-block h1{
+  margin:0;
+  font-size:28px;
+  font-weight:800;
+  letter-spacing:1.6px;
+  color:var(--text-main);
+}
+
+.subtitle{
+  margin-top:6px;
+  font-size:14px;
+  letter-spacing:0.3px;
+  color:var(--text-secondary);
+}
+
+.data-source{
+  font-size:12px;
+  color:var(--text-muted);
+  opacity:.9;
+}
+
+/* =========================================================
+   3) 核心布局（严格按你的手绘）
+========================================================= */
+.layout-grid{
+  display:grid;
+  gap:var(--gap);
+
+  grid-template-columns: 1.7fr 1fr;
+
+  grid-template-rows:
+    minmax(620px, 1.25fr)
+    minmax(360px, 0.85fr)
+    minmax(320px, 0.75fr);
+
+  grid-template-areas:
+    "tree right"
+    "heat heat"
+    "img1 img2";
+}
+
+#panel-tree{ grid-area: tree; }
+#right-stack{ grid-area: right; }
+#panel-heatmap{ grid-area: heat; }
+#panel-img-1{ grid-area: img1; }
+#panel-img-2{ grid-area: img2; }
+
+/* ✅ 右侧上下堆叠：现在是「地图在上，气泡在下」
+   目标：地图卡片稍微更高（容纳 legend），气泡卡片更短（减少留白）
+*/
+.right-stack{
+  display:grid;
+  grid-template-rows: 1.15fr 0.85fr;  /* 上(地图)略大，下(气泡)略小 */
+  gap: var(--gap);
+  min-height: 0;
+}
+
+/* =========================================================
+   4) Panel 卡片统一
+========================================================= */
+.panel{
+  background: var(--bg-card);
+  border: 1px solid var(--card-border);
+  border-radius: var(--card-radius);
+  padding: 12px 14px;
+  box-sizing: border-box;
+  box-shadow: var(--card-shadow);
+
+  display:flex;
+  flex-direction:column;
+  min-height:0;
+}
+
+.panel-title{
+  font-size:13px;
+  font-weight:800;
+  letter-spacing:.8px;
+  text-transform:uppercase;
+
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:8px;
+  margin-bottom:10px;
+}
+
+.panel-title::before{
+  content:"";
+  width:8px;
+  height:8px;
+  border-radius:50%;
+  background:var(--accent);
+}
+
+/* 热力图切换按钮 */
+.heatmap-toggle-btn{
+  margin-left:auto;
+  padding:6px 14px;
+  font-size:11px;
+  font-weight:600;
+  letter-spacing:0.5px;
+  text-transform:uppercase;
+  color:var(--text-main);
+  background:rgba(58,110,165,0.12);
+  border:1px solid rgba(58,110,165,0.25);
+  border-radius:8px;
+  cursor:pointer;
+  transition:all 0.2s ease;
+  font-family:inherit;
+}
+
+.heatmap-toggle-btn:hover{
+  background:rgba(58,110,165,0.20);
+  border-color:rgba(58,110,165,0.35);
+  transform:translateY(-1px);
+}
+
+.heatmap-toggle-btn:active{
+  transform:translateY(0);
+}
+
+.heatmap-toggle-btn .toggle-text{
+  display:inline-block;
+}
+
+.panel-body{
+  flex:1;
+  min-height:0;
+  position:relative;
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+}
+
+/* =========================================================
+   5) 让图“长满区域”
+========================================================= */
+svg{ width:100%; height:100%; display:block; }
+
+/* ✅ 树图：让它自适应高度（去掉 min-height:560px，否则会强行撑高导致无法与右侧平齐） */
+#panel-tree .panel-body{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  min-height:0;
+}
+
+#tree{
+  width:100%;
+  height:100%;
+  min-height:0; /* ✅ 关键：不要强行撑高 */
+}
+
+/* （可选）更接近方形观感：如果你觉得树图还是太扁，可以打开这行
+#panel-tree .panel-body{ aspect-ratio: 1 / 1; }
+*/
+
+/* =========================================================
+   6) 气泡图：缩短高度，减少留白
+========================================================= */
+.bubble-body{
+  display:flex;
+  flex-direction:column;
+  min-height:0;
+  gap:10px;
+}
+
+/* ✅ 不建议用 max-height 卡死整个 panel（会造成内部空白/挤压）
+   只需要控制 svg 本体高度即可
+*/
+#bubble-svg{
+  flex: 1 1 auto;
+  width:100%;
+  height:100%;
+  min-height: 230px;   /* ✅ 比之前更短 */
+  max-height: 300px;   /* ✅ 防止被撑得太高 */
+}
+
+/* bubble legend */
+#bubble-legend{
+  color: var(--text-secondary);
+  font-size: 12px;
+}
+
+/* =========================================================
+   7) 地图：legend 必须在卡片内部，不溢出
+========================================================= */
+.map-body{
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+  min-height:0;
+}
+
+/* 地图本体 */
+#map{
+  flex: 1 1 auto;
+  min-height: 240px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+#map svg{
+  width:100%;
+  height:100%;
+}
+
+/* ✅ legend 固定在卡片内：超出就内部滚动，不会“超过面板” */
+#legend{
+  flex: 0 0 auto;
+  max-height: 170px;     /* ✅ 控制图例区高度 */
+  overflow: auto;        /* ✅ 多了就滚动 */
+  position: static;
+
+  display:block;
+  padding:12px 14px;
+  border-radius:14px;
+  background: rgba(255,255,255,0.62);
+  border: 1px solid rgba(30,41,59,0.10);
+}
+
+/* =========================================================
+   8) 热力图：只在热力图区域横向滚动
+========================================================= */
+.heatmap-body{
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding-bottom: 8px;
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  position: relative;
+}
+
+/* 热力图容器样式 */
+.heatmap-container{
+  width: 100%;
+  height: 100%;
+  min-height: 280px;
+  box-sizing: border-box;
+  overflow: hidden;
+  position: relative;
+  display: block;
+}
+
+.heatmap-container svg{
+  width: 100%;
+  height: 100%;
+  max-width: 100%;
+  max-height: 100%;
+  display: block;
+  overflow: visible;
+}
+
+/* 兼容旧的#heatmap选择器 */
+#heatmap{
+  width: 100%;
+  height: 100%;
+  min-height: 280px;
+  max-width: 100%;
+  box-sizing: border-box;
+  overflow: hidden;
+  position: relative;
+}
+
+#heatmap svg{
+  width: 100%;
+  height: 100%;
+  max-width: 100%;
+  max-height: 100%;
+  display: block;
+  overflow: visible;
+}
+
+.heatmap-body::-webkit-scrollbar{
+  height: 10px;
+}
+.heatmap-body::-webkit-scrollbar-thumb{
+  background: rgba(0,0,0,0.15);
+  border-radius: 10px;
+}
+.heatmap-body::-webkit-scrollbar-track{
+  background: rgba(0,0,0,0.05);
+  border-radius: 10px;
+}
+
+/* =========================================================
+   9) 底部两张图片
+========================================================= */
+.img-body{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  min-height: 260px;
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.chart-img{
+  width: 100%;
+  height: 100%;
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  display: block;
+  opacity: .96;
+  box-sizing: border-box;
+}
+
+/* =========================================================
+   10) tooltip：默认隐藏（避免白块）
+========================================================= */
+.tooltip{
+  display:none;
+}
+
+/* 地图区域统一奶油白 */
+#panel-map .panel-body,
+#panel-map .map-body,
+#map{
+  background:#FAF9F6;
+}
+
+/* tooltip：更干净 */
+.map-tooltip{
+  position:absolute;
+  pointer-events:none;
+  padding:10px 12px;
+  border-radius:12px;
+  background:rgba(30,41,59,0.92);
+  color:#fff;
+  font:14px/1.35 system-ui,-apple-system,"Segoe UI","Microsoft YaHei",sans-serif;
+  box-shadow:0 10px 24px rgba(0,0,0,0.16);
+  backdrop-filter: blur(6px);
+  z-index:1000;
+  opacity:0;
+  transition: opacity 0.15s ease;
+}
+
+/* legend 内容样式（你原来的“带颜色图例”结构保持不变） */
+#legend .legend-title{
+  font-weight:800;
+  font-size:14px;
+  letter-spacing:.3px;
+  margin-bottom:10px;
+  color: rgba(30,41,59,0.78);
+}
+
+#legend .legend-items{
+  display:grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap:10px 12px;
+}
+
+#legend .legend-item{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  font-size:14px;
+  color: rgba(30,41,59,0.76);
+}
+
+#legend .legend-color{
+  width:14px;
+  height:14px;
+  border-radius:6px;
+  box-shadow: inset 0 0 0 2px rgba(255,255,255,0.80);
+  border: 1px solid rgba(30,41,59,0.10);
+}
+
+#legend .legend-text{
+  line-height:1;
+}
+
+/* =========================================================
+   11) 小屏响应
+========================================================= */
+@media (max-width: 1100px){
+  .layout-grid{
+    grid-template-columns: 1fr;
+    grid-template-rows: auto;
+    grid-template-areas:
+      "tree"
+      "right"
+      "heat"
+      "img1"
+      "img2";
+  }
+  .right-stack{
+    grid-template-rows: auto auto;
+  }
+  #heatmap{ 
+    min-width: 0;
+    width: 100%;
+  }
+  .heatmap-body{
+    overflow-x: auto;
+  }
+}
+
+
+/*# sourceMappingURL=/style.a511e2c0.css.map */

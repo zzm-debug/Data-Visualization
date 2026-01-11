@@ -1,0 +1,88 @@
+{
+  "Folk": {
+    "name_cn": "民谣",
+    "keywords": [
+      "民谣",
+      "folk",
+      "folk music",
+      "民谣音乐",
+      "民谣歌曲"
+    ]
+  },
+  "Pop": {
+    "name_cn": "流行",
+    "keywords": [
+      "流行",
+      "pop",
+      "pop music",
+      "流行音乐",
+      "流行歌曲"
+    ]
+  },
+  "Rock": {
+    "name_cn": "摇滚",
+    "keywords": [
+      "摇滚",
+      "rock",
+      "rock music",
+      "摇滚音乐",
+      "摇滚歌曲"
+    ]
+  },
+  "Rap": {
+    "name_cn": "说唱",
+    "keywords": [
+      "说唱",
+      "rap",
+      "hip hop",
+      "hip-hop",
+      "说唱音乐",
+      "说唱歌曲",
+      "嘻哈"
+    ]
+  },
+  "Electronic": {
+    "name_cn": "电子",
+    "keywords": [
+      "电子",
+      "electronic",
+      "EDM",
+      "电子音乐",
+      "电子歌曲",
+      "电音"
+    ]
+  },
+  "Classical": {
+    "name_cn": "古典",
+    "keywords": [
+      "古典",
+      "classical",
+      "classical music",
+      "古典音乐",
+      "古典歌曲"
+    ]
+  },
+  "Jazz": {
+    "name_cn": "爵士",
+    "keywords": [
+      "爵士",
+      "jazz",
+      "jazz music",
+      "爵士音乐",
+      "爵士歌曲"
+    ]
+  },
+  "ACG": {
+    "name_cn": "ACG",
+    "keywords": [
+      "ACG",
+      "动漫",
+      "动画音乐",
+      "游戏音乐",
+      "anime music",
+      "game music",
+      "二次元音乐",
+      "BGM"
+    ]
+  }
+}
